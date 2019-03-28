@@ -1,4 +1,4 @@
-# Projet BDD
+# Velo'v Map - Projet BDD
 Réalisé dans le cadre de l'apprentissage du SQL / NoSQL
 
 Auteurs :
