@@ -3,6 +3,7 @@ import { ServiceContainer } from './services/Service';
 import Controller from './controllers/Controller';
 import MongoDBService from './services/MongoDBService';
 import DataRetrieveService from './services/DataRetrieveService';
+import HomepageController from './controllers/HomepageController';
 
 export default class Server {
 
@@ -26,11 +27,15 @@ export default class Server {
     }
 
     public start(port: number = 80): void {
-        this.app.listen(port, () => {
-            console.log(`Server is listening on port ${port}`);
-        });
-        
-        this.container.dataRetrieve.updateDataInterval(5000);
+        this.container.mongodb.connect().then(() => {
+            console.log('Connected to MongoDB Database');
+
+            this.app.listen(port, () => {
+                console.log(`Server is listening on port ${port}`);
+            });
+            
+            this.container.dataRetrieve.updateData(60 * 60 * 1000);
+        }).catch(console.error);
     }
 
     private createExpressApplication(): Express.Application {
@@ -44,10 +49,8 @@ export default class Server {
         });
 
         // Routes vers les assets
-        app.set('views', 'public/views');
-        app.set('/css', 'public/css');
-        app.set('/js', 'public/js');
-        app.set('/img', 'public/img');
+        app.set('views', 'views');
+        app.use('/static', Express.static('public'));
 
         return app;
     }
@@ -62,6 +65,16 @@ export default class Server {
     }
 
     private createControllers(): Controller[] {
-        return [];
+        const controllers: Controller[] = [
+            new HomepageController(this.container)
+        ];
+        
+        // Ajout des routeurs Express des contrôleurs à l'application Express
+        for (const controller of controllers) {
+            this.app.use(controller.rootPath, controller.router);
+            console.log(`Using ${controller.constructor.name} for ${controller.rootPath}`);
+        }
+
+        return controllers;
     }
 }

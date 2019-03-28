@@ -1,5 +1,9 @@
 import Service, { ServiceContainer } from "./Service";
 import * as request from 'request-promise';
+import DistrictSchema from "../schemas/DistrictSchema";
+import { Collection } from "mongodb";
+import Schema from "../schemas/Schema";
+import StationSchema from "../schemas/StationSchema";
 
 export default class DataRetrieveService extends Service {
 
@@ -15,11 +19,34 @@ export default class DataRetrieveService extends Service {
         }
     }
 
-    public updateDataInterval(interval: number) {
-        setInterval(() => {
-            this.getData('districts').then((data) => {
-                console.log(data);
+    public updateData(interval: number) {
+        setInterval(this.updateInterval, interval);
+        this.updateInterval();
+    }
+
+    private updateInterval(): void {
+        // Mise à jour des quartiers
+        this.getData('districts').then((data) => {
+            data = JSON.parse(data); // transformation en JSON
+            const coll: Collection<DistrictSchema> = this.container.mongodb.getCollection<DistrictSchema>('districts');
+
+            coll.deleteMany({}).then(() => {
+                coll.insertMany(data.features).then((result) => {
+                    console.log(`Updated collection "districts" (${result.result.n} inserted)`);
+                }).catch(console.error);
             }).catch(console.error);
-        }, interval);
+        }).catch(console.error);
+
+        // Mise à jour des stations Vélo'v
+        this.getData('stations').then((data) => {
+            data = JSON.parse(data); // transformation en JSON
+            const coll: Collection<StationSchema> = this.container.mongodb.getCollection<StationSchema>('stations');
+
+            coll.deleteMany({}).then(() => {
+                coll.insertMany(data.features).then((result) => {
+                    console.log(`Updated collection "stations" (${result.result.n} inserted)`);
+                }).catch(console.error);
+            }).catch(console.error);
+        }).catch(console.error);
     }
 }
