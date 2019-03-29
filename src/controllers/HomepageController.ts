@@ -13,9 +13,11 @@ export default class HomepageController extends Controller {
     }
 
     private getIndex(req: Request, res: Response): any {
-        this.container.mongodb.getCollection('stations').find({}).toArray().then((stations) => {
-            return res.render('homepage/index.html.twig', {
-                stations
+        this.container.mongodb.getCollection('stations').find({ 'properties.status': { $ne: 'CLOSED' } }).toArray().then((stations) => {
+            this.container.mongodb.getCollection('districts').find({}).toArray().then((districts) => {
+                return res.render('homepage/index.html.twig', {
+                    stations, districts
+                });
             });
         });
     }
