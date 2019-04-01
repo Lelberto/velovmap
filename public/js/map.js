@@ -41,8 +41,8 @@ function createMap(data, options = defaultOptions) {
         const polygon = L.polygon(reverseCoords(district.geometry.coordinates), {
             weight: 1,
             color: '#000000',
-            fillColor: '#8E008E',
-            opacity: 0.7
+            fillColor: '#45b9ff',
+            opacity: 0.8
         }).addTo(map);
         polygon.bindPopup(`<b>${district.properties.nom}</b>`);
     }
