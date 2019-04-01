@@ -5,6 +5,7 @@
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.css" />
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.Default.css" />
+        <link rel="stylesheet" type="text/css" href="static/css/clusters.css" />
         <style>
             #map {
                 height: 100%;
@@ -42,6 +43,10 @@
                 console.log('Résultats :', results);
             });
 
+            clientSocket.on('around-results', (results) => {
+                updatePositionMarker(results);
+            });
+
             window.onload = function() {
                 getGeolocation().then((position) => {
                     createMap({ stations, districts, interests }, {
@@ -51,9 +56,14 @@
                     console.error(err);
                     createMap({ stations, districts });
                 });
-
-                $('#testInput').on('keyup', (e) => {
-                    // clientSocket.emit('search', $('#testInput').val());
+                
+                $('#aroundButton').on('click', () => {
+                    getGeolocation().then((position) => {
+                        clientSocket.emit('around', [position.coords.longitude, position.coords.latitude]); // Inversion des coordonnées
+                    }).catch((err) => {
+                        console.error(err);
+                        alert('Impossible de vous trouver... Avez-vous activé la localisation ?');
+                    });
                 });
             }
         </script>
