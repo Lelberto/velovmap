@@ -2,6 +2,14 @@ const defaultOptions = {
     position: [45.757407, 4.832341] // Centre de Lyon
 }
 
+
+
+/**
+ * Crée la map.
+ * 
+ * @param data Données de la map
+ * @param options Options de la map
+ */
 function createMap(data, options = defaultOptions) {
     const stations = data.stations;
     const districts = data.districts;
@@ -40,19 +48,41 @@ function createMap(data, options = defaultOptions) {
     }
 }
 
+
+
+/**
+ * Crée le markeur de la position de l'utilisateur.
+ * 
+ * @param map Map où le markeur sera créé
+ */
 function createPositionMarker(map) {
     if (navigator.geolocation) {
         const marker = L.marker([0, 0]).addTo(map);
         marker.bindPopup('Vous êtes ici');
 
+        // Mise à jour de la position
         setInterval(() => {
-            navigator.geolocation.getCurrentPosition((position) => {
+            getGeolocation().then((position) => {
                 marker.setLatLng(new L.LatLng(position.coords.latitude, position.coords.longitude));
-            });
+            }).catch(console.error);
         }, 10000);
+
+        // Initialisation de la position
+        getGeolocation().then((position) => {
+            marker.setLatLng(new L.LatLng(position.coords.latitude, position.coords.longitude));
+        }).catch(console.error);
     }
 }
 
+
+
+/**
+ * Inverse les coordonnées.
+ * 
+ * Les coordonnées inversées permettent de rendre compatible le GeoJSON en polygon.
+ * 
+ * @param coords Coordonnées à inverser
+ */
 function reverseCoords(coords) {
     for (const coord of coords) {
         for (const part in coord) {
@@ -60,4 +90,25 @@ function reverseCoords(coords) {
         }
     }
     return coords;
+}
+
+
+
+/**
+ * Retourne la géolocalisation de l'utilisateur.
+ * 
+ * @returns Géolocalisation de l'utilisateur (Promise)
+ */
+function getGeolocation() {
+    return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                resolve(position);
+            }, (err) => {
+                reject(err);
+            });
+        } else {
+            reject(new Error('Votre naviguateur ne support pas les données de localisation'));
+        }
+    });
 }
