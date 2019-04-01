@@ -23,10 +23,11 @@
             // Transformation des variables Twig vers JavaScript
             const stations = {{ stations|json_encode|raw }};
             const districts = {{ districts|json_encode|raw }};
+            const interests = {{ interests|json_encode|raw }};
 
             window.onload = function() {
                 getGeolocation().then((position) => {
-                    createMap({ stations, districts }, {
+                    createMap({ stations, districts, interests }, {
                         position: [position.coords.latitude, position.coords.longitude]
                     });
                 }).catch((err) => {
