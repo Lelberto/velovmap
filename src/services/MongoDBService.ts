@@ -42,7 +42,7 @@ export default class MongoDBService extends Service {
      * 
      * @param collectionName Nom de la collection à retourner
      */
-    public getCollection<T extends Schema>(collectionName: 'districts' | 'stations'): MongoDB.Collection<T> {
+    public getCollection<T extends Schema>(collectionName: 'districts' | 'stations' | 'interests'): MongoDB.Collection<T> {
         return this.mongo.db('velovmap').collection<T>(collectionName);
     }
 }

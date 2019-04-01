@@ -49,7 +49,7 @@ export default class Server {
         });
 
         // Routes vers les assets
-        app.set('views', 'views');
+        app.set('views', 'public/views');
         app.use('/static', Express.static('public'));
 
         return app;
