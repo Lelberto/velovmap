@@ -1,5 +1,8 @@
 import Schema from "./Schema";
 
+/**
+ * Interface du schéma des stations Vélo'v.
+ */
 export default interface StationSchema extends Schema {
     type: string;
     properties: {

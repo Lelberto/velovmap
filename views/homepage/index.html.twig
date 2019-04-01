@@ -20,35 +20,19 @@
         <script type="text/javascript" src="https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js"></script>
         <script src="static/js/map.js"></script>
         <script>
+            // Transformation des variables Twig vers JavaScript
             const stations = {{ stations|json_encode|raw }};
             const districts = {{ districts|json_encode|raw }};
 
             window.onload = function() {
-                    if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition((position) => {
-                        createMap({ stations, districts }, {
-                            position: [position.coords.latitude, position.coords.longitude]
-                        });
-                    }, (err) => {
-                        switch(err.code) {
-                            case err.PERMISSION_DENIED:
-                                alert('Géolocalisation refusée par l\'utilisateur');
-                                break;
-                            case err.POSITION_UNAVAILABLE:
-                                alert('Géolocalisation indisponible');
-                                break;
-                            case err.TIMEOUT:
-                                alert('Géolocalisation expirée');
-                                break;
-                            default:
-                            case err.UNKNOWN_ERROR:
-                                alert('Erreur de géolocalisation inconnue');
-                                break;
-                        }
+                getGeolocation().then((position) => {
+                    createMap({ stations, districts }, {
+                        position: [position.coords.latitude, position.coords.longitude]
                     });
-                } else {
-                    alert('Votre naviguateur ne support pas les données de localisation');
-                }
+                }).catch((err) => {
+                    console.error(err);
+                    createMap({ stations, districts });
+                });
             }
         </script>
     </body>

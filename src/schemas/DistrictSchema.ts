@@ -1,5 +1,8 @@
 import Schema from "./Schema";
 
+/**
+ * Interface du schéma des quartiers de Lyon.
+ */
 export default interface DistrictSchema extends Schema {
     type: string;
     properties: {

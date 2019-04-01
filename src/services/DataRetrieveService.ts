@@ -2,15 +2,28 @@ import Service, { ServiceContainer } from "./Service";
 import * as request from 'request-promise';
 import DistrictSchema from "../schemas/DistrictSchema";
 import { Collection } from "mongodb";
-import Schema from "../schemas/Schema";
 import StationSchema from "../schemas/StationSchema";
 
+/**
+ * Classe gérant le service de récupération des données depuis l'OpenData du Grand Lyon.
+ */
 export default class DataRetrieveService extends Service {
 
+    /**
+     * Construit un nouveau service de récupération des données depuis l'OpenData du Grand Lyon.
+     * 
+     * @param container Conteneur de services
+     */
     public constructor(container: ServiceContainer) {
         super(container);
     }
 
+    /**
+     * Retourne les données souhaitées depuis l'OpenData.
+     * 
+     * @param dataType Type des données à récupérer
+     * @async
+     */
     public async getData(dataType: 'districts' | 'stations'): Promise<any> {
         switch (dataType) {
             case "districts": return await request('https://download.data.grandlyon.com/wfs/grandlyon?SERVICE=WFS&VERSION=2.0.0&outputformat=GEOJSON&maxfeatures=10000&request=GetFeature&typename=adr_voie_lieu.adrquartier&SRSNAME=urn:ogc:def:crs:EPSG::4171');
@@ -19,12 +32,20 @@ export default class DataRetrieveService extends Service {
         }
     }
 
-    public updateData(interval: number) {
-        setInterval(this.updateInterval, interval);
-        this.updateInterval();
+    /**
+     * Met à jour les données dans les bases de données à un intervalle régulier.
+     * 
+     * @param interval Intervalle de récupération des données (en millisecondes)
+     */
+    public updateInterval(interval: number) {
+        setInterval(this.updateData, interval);
+        this.updateData();
     }
 
-    private updateInterval(): void {
+    /**
+     * Récupère et insert les données dans les bases de données.
+     */
+    private updateData(): void {
         // Mise à jour des quartiers
         this.getData('districts').then((data) => {
             data = JSON.parse(data); // transformation en JSON

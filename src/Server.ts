@@ -34,7 +34,7 @@ export default class Server {
                 console.log(`Server is listening on port ${port}`);
             });
             
-            this.container.dataRetrieve.updateData(60 * 60 * 1000);
+            this.container.dataRetrieve.updateInterval(60 * 60 * 1000);
         }).catch(console.error);
     }
 
