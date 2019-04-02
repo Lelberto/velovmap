@@ -84,25 +84,12 @@
 
             window.onload = function() {
                 getGeolocation().then((position) => {
-                    createMap({
-                        stations,
-                        districts,
-                        interests
-                    }, {
+                    createMap({ stations, districts, interests }, {
                         position: [position.coords.latitude, position.coords.longitude]
                     });
                 }).catch((err) => {
                     console.error(err);
-                    createMap({stations, districts});
-                });
-                
-                $('#aroundButton').on('click', () => {
-                    getGeolocation().then((position) => {
-                        clientSocket.emit('around', [position.coords.longitude, position.coords.latitude]); // Inversion des coordonnées
-                    }).catch((err) => {
-                        console.error(err);
-                        alert('Impossible de vous trouver... Avez-vous activé la localisation ?');
-                    });
+                    createMap({ stations, districts, interests });
                 });
             }
         </script>
