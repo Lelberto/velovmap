@@ -64,7 +64,7 @@ function createPositionMarker() {
                 positionMarker.setLatLng(new L.LatLng(position.coords.latitude, position.coords.longitude));
                 clientSocket.emit('around', [position.coords.longitude, position.coords.latitude]);
             }).catch((err) => {
-                clientSocket.emit('around', defaultOptions.position);
+                clientSocket.emit('around', [defaultOptions.position[1], defaultOptions.position[0]]);
                 console.error(err);
             });
         }, 10000);
@@ -74,7 +74,7 @@ function createPositionMarker() {
             positionMarker.setLatLng(new L.LatLng(position.coords.latitude, position.coords.longitude));
             clientSocket.emit('around', [position.coords.longitude, position.coords.latitude]);
         }).catch((err) => {
-            clientSocket.emit('around', defaultOptions.position);
+            clientSocket.emit('around', [defaultOptions.position[1], defaultOptions.position[0]]);
             console.error(err);
         });
     }
