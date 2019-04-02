@@ -17,7 +17,7 @@
             <div class="d-flex justify-content-between align-items-center w-100">
                 <a class="navbar-brand" href="">
                     <img alt="Vélo'v" class="d-inline-block align-top" height="30" src="static/img/velov-icon.png" width="30">
-                    Velo'v Map
+                    Vélo'v Map
                 </a>
                 <div class="dropdown">
                     <form class="form-inline my-2 my-lg-0">
@@ -30,8 +30,34 @@
                     </form>
                 </div>
             </div>
-        </nav>
-        <div id="map"></div>
+        </nav>   
+        <div class="container-fluid">     
+            <div class="row">
+                <div id="map" class="col-10"></div>
+                <div class="col-2" style="background-color: rgb(33, 37, 41);">
+                <br>
+                    <h4 class="text-light text-center">Légende</h4>
+                    <ul class="list-group">                        
+                        <li class="list-group-item">
+                            <img src="static/img/velov-icon.png" width="15%"/>
+                            <a>Stations Vélo'v</a>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="badge badge-warning badge-pill">9</span>
+                            <a>Nombres de points d'intérêt touristique dans la zone</a>
+                        </li>     
+                        <li class="list-group-item">
+                            <span class="badge badge-danger badge-pill">114</span>     
+                            <a>Nombres de stations Vélo'v dans la zone</a>
+                        </li> 
+                        <li class="list-group-item">
+                            <img src="static/img/interest-icon.png" width="15%"/>      
+                            <a>Points d'intérêt touristique</a>
+                        </li>         
+                    </ul>
+                </div>
+            </div>
+        </div>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
