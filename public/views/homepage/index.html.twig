@@ -65,15 +65,6 @@
                     console.error(err);
                     createMap({ stations, districts, interests });
                 });
-                
-                $('#aroundButton').on('click', () => {
-                    getGeolocation().then((position) => {
-                        clientSocket.emit('around', [position.coords.longitude, position.coords.latitude]); // Inversion des coordonnées
-                    }).catch((err) => {
-                        console.error(err);
-                        alert('Impossible de vous trouver... Avez-vous activé la localisation ?');
-                    });
-                });
             }
         </script>
     </body>

@@ -63,14 +63,20 @@ function createPositionMarker() {
             getGeolocation().then((position) => {
                 positionMarker.setLatLng(new L.LatLng(position.coords.latitude, position.coords.longitude));
                 clientSocket.emit('around', [position.coords.longitude, position.coords.latitude]);
-            }).catch(console.error);
+            }).catch((err) => {
+                clientSocket.emit('around', defaultOptions.position);
+                console.error(err);
+            });
         }, 10000);
 
         // Initialisation de la position
         getGeolocation().then((position) => {
             positionMarker.setLatLng(new L.LatLng(position.coords.latitude, position.coords.longitude));
             clientSocket.emit('around', [position.coords.longitude, position.coords.latitude]);
-        }).catch(console.error);
+        }).catch((err) => {
+            clientSocket.emit('around', defaultOptions.position);
+            console.error(err);
+        });
     }
 }
 
