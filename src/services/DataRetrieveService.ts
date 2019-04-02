@@ -17,6 +17,8 @@ export default class DataRetrieveService extends Service {
      */
     public constructor(container: ServiceContainer) {
         super(container);
+
+        this.updateData = this.updateData.bind(this);
     }
 
     /**
