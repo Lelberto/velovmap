@@ -55,7 +55,7 @@ function createMap(data, options = defaultOptions) {
  */
 function createPositionMarker() {
     if (navigator.geolocation) {
-        positionMarker = L.marker([0, 0]).addTo(map);
+        positionMarker = L.marker(defaultOptions.position).addTo(map);
         positionMarker.bindPopup('<b>Vous êtes ici</b>');
 
         // Mise à jour de la position
