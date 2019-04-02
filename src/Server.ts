@@ -59,7 +59,7 @@ export default class Server {
                 this.container.socket.start().then(() => console.log('Socket is started'));
             });
             
-            this.container.dataRetrieve.updateInterval(60 * 60 * 1000);
+            this.container.dataRetrieve.updateInterval(30 * 60 * 1000);
         }).catch(console.error);
     }
 
