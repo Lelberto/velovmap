@@ -6,6 +6,7 @@ import MongoDBService from './services/MongoDBService';
 import DataRetrieveService from './services/DataRetrieveService';
 import HomepageController from './controllers/HomepageController';
 import SocketService from './services/SocketService';
+import ConfigurationService from './services/ConfigurationService';
 
 /**
  * Classe gérant le serveur.
@@ -101,6 +102,7 @@ export default class Server {
     private createServiceContainer(): ServiceContainer {
         const container: ServiceContainer = {};
         
+        container.config = new ConfigurationService(container);
         container.dataRetrieve = new DataRetrieveService(container);
         container.mongodb = new MongoDBService(container);
         container.socket = new SocketService(container);

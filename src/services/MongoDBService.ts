@@ -1,13 +1,13 @@
 import Service, { ServiceContainer } from "./Service";
-import * as MongoDB from 'mongodb';
 import Schema from "../schemas/Schema";
+import { MongoClient, Collection, MongoClientOptions } from "mongodb";
 
 /**
  * Classe gérant le service de la base de données MongoDB.
  */
 export default class MongoDBService extends Service {
 
-    private readonly mongo: MongoDB.MongoClient;
+    private readonly mongo: MongoClient;
 
     /**
      * Construit un nouveau service de la base de données MongoDB.
@@ -16,7 +16,7 @@ export default class MongoDBService extends Service {
      */
     public constructor(container: ServiceContainer) {
         super(container);
-        this.mongo = new MongoDB.MongoClient('mongodb://localhost:27017', { useNewUrlParser: true });
+        this.mongo = this.createMongo();
     }
 
     /**
@@ -42,7 +42,29 @@ export default class MongoDBService extends Service {
      * 
      * @param collectionName Nom de la collection à retourner
      */
-    public getCollection<T extends Schema>(collectionName: 'districts' | 'stations' | 'interests'): MongoDB.Collection<T> {
+    public getCollection<T extends Schema>(collectionName: 'districts' | 'stations' | 'interests'): Collection<T> {
         return this.mongo.db('velovmap').collection<T>(collectionName);
+    }
+
+    /**
+     * Crée le client MongoDB.
+     * 
+     * @returns Client MongoDB créé
+     */
+    private createMongo(): MongoClient {
+        const config = this.container.config.databases.mongodb;
+        const options: MongoClientOptions = { useNewUrlParser: true };
+
+        if (config.user) { // S'il y a une authentification à effectuer
+            options.auth = {
+                user: config.user,
+                password: config.password
+            }
+            console.log(`MongoDB authentication with user ${config.user}`);
+        } else { // S'il n'y a pas d'authentification à effectuer
+            console.log('No MongoDB authentication');
+        }
+
+        return new MongoClient(`mongodb://${config.host}:${config.port}`, options);
     }
 }

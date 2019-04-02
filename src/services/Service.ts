@@ -1,6 +1,7 @@
-import NoSQLDatabaseService from "./MongoDBService";
 import DataRetrieveService from "./DataRetrieveService";
 import SocketService from "./SocketService";
+import ConfigurationService from "./ConfigurationService";
+import MongoDBService from "./MongoDBService";
 
 /**
  * Classe gérant les services.
@@ -27,7 +28,8 @@ export default abstract class Service {
  * Interface gérant le conteneur de services.
  */
 export interface ServiceContainer {
+    config?: ConfigurationService;
     dataRetrieve?: DataRetrieveService;
-    mongodb?: NoSQLDatabaseService;
+    mongodb?: MongoDBService;
     socket?: SocketService;
 }
