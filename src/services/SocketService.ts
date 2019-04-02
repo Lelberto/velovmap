@@ -29,6 +29,7 @@ export default class SocketService extends Service {
             clientSocket.on('around', (position) => {
                 this.container.mongodb.getCollection<StationSchema>('stations').find({
                     'properties.status': { $ne: 'CLOSED' },
+                    'properties.available_bikes': { $gt: 0 },
                     geometry: {
                         $near: {
                             $geometry: {
