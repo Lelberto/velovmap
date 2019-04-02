@@ -2,6 +2,7 @@ import * as socketio from 'socket.io';
 import Service, { ServiceContainer } from "./Service";
 import Server from '../Server';
 import InterestSchema from '../schemas/InterestSchema';
+import StationSchema from '../schemas/StationSchema';
 
 export default class SocketService extends Service {
 
@@ -22,6 +23,24 @@ export default class SocketService extends Service {
                     }
                 }).toArray().then((results) => {
                     clientSocket.emit('search-results', results);
+                }).catch(console.error);
+            });
+
+            clientSocket.on('around', (position) => {
+                this.container.mongodb.getCollection<StationSchema>('stations').find({
+                    'properties.status': { $ne: 'CLOSED' },
+                    'properties.available_bikes': { $gt: 0 },
+                    geometry: {
+                        $near: {
+                            $geometry: {
+                                type: 'Point',
+                                coordinates: position
+                            },
+                            $maxDistance: 500
+                        }
+                    }
+                }).toArray().then((stations) => {
+                    clientSocket.emit('around-results', stations);
                 }).catch(console.error);
             });
         });

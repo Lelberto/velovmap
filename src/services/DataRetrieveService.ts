@@ -67,6 +67,7 @@ export default class DataRetrieveService extends Service {
 
             coll.deleteMany({}).then(() => {
                 coll.insertMany(data.features).then((result) => {
+                    coll.createIndex({ geometry: '2dsphere' });
                     console.log(`Updated collection "stations" (${result.result.n} inserted)`);
                 }).catch(console.error);
             }).catch(console.error);
@@ -79,6 +80,7 @@ export default class DataRetrieveService extends Service {
 
             coll.deleteMany({}).then(() => {
                 coll.insertMany(data.features).then((result) => {
+                    coll.createIndex({ geometry: '2dsphere' });
                     console.log(`Updated collection "interests" (${result.result.n} inserted)`);
                 }).catch(console.error);
             }).catch(console.error);
