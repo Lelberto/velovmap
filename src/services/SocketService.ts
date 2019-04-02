@@ -39,7 +39,7 @@ export default class SocketService extends Service {
                             $maxDistance: 500
                         }
                     }
-                }).toArray().then((stations) => {
+                }).limit(5).toArray().then((stations) => {
                     clientSocket.emit('around-results', stations);
                 }).catch(console.error);
             });
