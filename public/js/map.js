@@ -82,9 +82,9 @@ function createPositionMarker() {
  * @param stations Stations Vélo'v à ajouter dans le contenu du markeur de position
  */
 function updatePositionMarker(stations) {
-    let text = '<br />Stations les plus proches :';
+    let text = '';
     for (const station of stations) {
-        text += `<br /><b>${station.properties.name}</b> (vélos disponibles : ${station.properties.available_bikes})`;
+        text += `<br /><b>${station.properties.name}</b><br />À ${getDistance([positionMarker.getLatLng().lat, positionMarker.getLatLng().lng], [station.properties.lat, station.properties.lng])} mètres - Vélos disponibles : ${station.properties.available_bikes}<br />`;
     }
     positionMarker.bindPopup(`<b>Vous êtes ici</b><br /> ${text}`);
 }
@@ -196,4 +196,23 @@ function getGeolocation() {
             reject(new Error('Votre naviguateur ne support pas les données de localisation'));
         }
     });
+}
+
+
+
+/**
+ * Retourne la distance entre deux positions.
+ * 
+ * @param position1 Position n°1
+ * @param position2 Position n°2
+ * @returns Distance entre les deux positions (en mètres)
+ */
+function getDistance(position1, position2) {
+    var earthRadius = 6371;
+    var dLat = Math.toRadians(position2[0] - position1[0]);
+    var dLon = Math.toRadians(position2[1] - position1[1]); 
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(position1[0])) * Math.cos(Math.toRadians(position2[0])) * Math.sin(dLon / 2) * Math.sin(dLon / 2); 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); 
+    var d = Math.trunc((earthRadius * c) * 1000); // Conversion kilomètres -> mètres et retrait des décimales
+    return d;
 }
