@@ -3,6 +3,3 @@ node_modules/
 
 # JavaScript build
 build/
-
-# Configuration files
-config/databases.yml
