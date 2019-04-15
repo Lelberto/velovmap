@@ -13,6 +13,12 @@ export default class ConfigurationService extends Service {
             port: number;
             user: string;
             password: string;
+        },
+        mysql: {
+            host: string;
+            port: number;
+            user: string;
+            password: string;
         }
     };
 

@@ -7,6 +7,7 @@ import DataRetrieveService from './services/DataRetrieveService';
 import HomepageController from './controllers/HomepageController';
 import SocketService from './services/SocketService';
 import ConfigurationService from './services/ConfigurationService';
+import MySQLService from './services/MySQLService';
 
 /**
  * Classe gérant le serveur.
@@ -105,6 +106,7 @@ export default class Server {
         container.config = new ConfigurationService(container);
         container.dataRetrieve = new DataRetrieveService(container);
         container.mongodb = new MongoDBService(container);
+        container.mysql = new MySQLService(container);
         container.socket = new SocketService(container);
 
         return container;

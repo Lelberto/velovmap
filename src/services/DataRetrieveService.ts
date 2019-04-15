@@ -1,5 +1,6 @@
 import Service, { ServiceContainer } from "./Service";
 import * as request from 'request-promise';
+import * as mysql from 'mysql2';
 import DistrictSchema from "../schemas/DistrictSchema";
 import { Collection } from "mongodb";
 import StationSchema from "../schemas/StationSchema";
@@ -60,6 +61,17 @@ export default class DataRetrieveService extends Service {
                     console.log(`Updated collection "districts" (${result.result.n} inserted)`);
                 }).catch(console.error);
             }).catch(console.error);
+
+            // Création du script MySQL
+            this.container.mysql.query('TRUNCATE TABLE districts');
+
+            let sqlQuery = `INSERT INTO districts VALUES `;
+            for (const feature of data.features) {
+                sqlQuery += `(DEFAULT, '${feature.properties.nom}', '${feature.properties.theme}', '${feature.properties.soustheme}', '${feature.properties.siret}', '${feature.properties.datecreation}'), `;
+            }
+            this.container.mysql.query(sqlQuery).then(() => {
+                console.log('(fake) Updated table "districts"');
+            });
         }).catch(console.error);
 
         // Mise à jour des stations Vélo'v
@@ -73,6 +85,17 @@ export default class DataRetrieveService extends Service {
                     console.log(`Updated collection "stations" (${result.result.n} inserted)`);
                 }).catch(console.error);
             }).catch(console.error);
+
+            // Création du script MySQL
+            this.container.mysql.query('TRUNCATE TABLE stations');
+            
+            let sqlQuery = `INSERT INTO stations VALUES `;
+            for (const feature of data.features) {
+                sqlQuery += `(DEFAULT, ${feature.properties.number}, '${feature.properties.name}', '${feature.properties.address}', '${feature.properties.address2}', ${feature.properties.nmarrond}, '${feature.properties.bonus}', '${feature.properties.pole}', ${feature.properties.lat}, ${feature.properties.lng}, ${feature.properties.bike_stands}, '${feature.properties.status}', ${feature.properties.available_bike_stands}, ${feature.properties.available_bikes}, ${feature.properties.availabilitycode}, '${feature.properties.availability}', ${feature.properties.banking}, ${feature.properties.gid}, '${feature.properties.last_update}', '${feature.properties.last_update_fme}', '${feature.properties.code_insee}', '${feature.properties.langue}', '${feature.properties.etat}', '${feature.properties.nature}', '${feature.properties.type}', '${feature.properties.description}'), `;
+            }
+            this.container.mysql.query(sqlQuery).then(() => {
+                console.log('(fake) Updated table "stations"');
+            });
         }).catch(console.error);
 
         // Mise à jour des points d'intérêt touristiques
@@ -86,6 +109,17 @@ export default class DataRetrieveService extends Service {
                     console.log(`Updated collection "interests" (${result.result.n} inserted)`);
                 }).catch(console.error);
             }).catch(console.error);
+
+            // Création du script MySQL
+            this.container.mysql.query('TRUNCATE TABLE interests');
+            
+            let sqlQuery = `INSERT INTO interests VALUES `;
+            for (const feature of data.features) {
+                sqlQuery += `(DEFAULT, '${feature.properties.id_sitra1}', '${feature.properties.type}', '${feature.properties.type_detail}', '${feature.properties.nom}', ${feature.properties.adresse}, ${feature.properties.codepostal}, '${feature.properties.telephone}', '${feature.properties.fax}', '${feature.properties.telephonefax}', '${feature.properties.email}', '${feature.properties.siteweb}', '${feature.properties.facebook}', '${feature.properties.classement}', '${feature.properties.ouvertude}', '${feature.properties.tarifsenclair}', ${feature.properties.tarifsmin}, '${feature.properties.tarifsmax}', '${feature.properties.producteur}', '${feature.properties.gid}', '${feature.properties.date_creation}', '${feature.properties.last_update}', '${feature.properties.last_update_fme}'), `;
+            }
+            this.container.mysql.query(sqlQuery).then(() => {
+                console.log('(fake) Updated table "interests"');
+            });
         }).catch(console.error);
     }
 }

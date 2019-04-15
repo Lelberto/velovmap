@@ -2,6 +2,7 @@ import DataRetrieveService from "./DataRetrieveService";
 import SocketService from "./SocketService";
 import ConfigurationService from "./ConfigurationService";
 import MongoDBService from "./MongoDBService";
+import MySQLService from "./MySQLService";
 
 /**
  * Classe gérant les services.
@@ -31,5 +32,6 @@ export interface ServiceContainer {
     config?: ConfigurationService;
     dataRetrieve?: DataRetrieveService;
     mongodb?: MongoDBService;
+    mysql?: MySQLService;
     socket?: SocketService;
 }
