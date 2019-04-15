@@ -21,7 +21,7 @@ export default class SocketService extends Service {
                     'properties.nom': {
                         $regex: `^${str}`
                     }
-                }).toArray().then((results) => {
+                }).limit(10).toArray().then((results) => {
                     clientSocket.emit('search-results', results);
                 }).catch(console.error);
             });

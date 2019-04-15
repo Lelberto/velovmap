@@ -22,11 +22,7 @@
                 <div class="dropdown">
                     <form class="form-inline my-2 my-lg-0">
                         <input class="form-control mr-sm-2 dropdown-toggle" placeholder="Point touristique" type="search" id="interestSearchInput" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <div class="dropdown-menu" aria-labelledby="interestSearchInput" id="interestSearchDropdown">
-                            <button class="dropdown-item" type="button">Action</button>
-                            <button class="dropdown-item" type="button">Another action</button>
-                            <button class="dropdown-item" type="button">Something else here</button>
-                        </div>
+                        <div class="dropdown-menu" aria-labelledby="interestSearchInput" id="interestSearchDropdown"></div>
                     </form>
                 </div>
             </div>
@@ -75,7 +71,12 @@
             const clientSocket = io();
 
             clientSocket.on('search-results', (results) => {
-                console.log('Résultats :', results);
+                const $dropdown = $('#interestSearchDropdown');
+                $dropdown.empty();
+                for (const result of results) {
+                    const $child = $('<button>').addClass('dropdown-item').attr('type', 'button').text(result.properties.nom);
+                    $dropdown.append($child);
+                }
             });
 
             clientSocket.on('around-results', (results) => {
@@ -90,6 +91,14 @@
                 }).catch((err) => {
                     console.error(err);
                     createMap({ stations, districts, interests });
+                });
+
+                $('#interestSearchInput').on('keyup', () => {
+                    const $input = $('#interestSearchInput');
+                    
+                    if ($input.val().length > 0) {
+                        clientSocket.emit('search', $input.val());
+                    }
                 });
             }
         </script>
